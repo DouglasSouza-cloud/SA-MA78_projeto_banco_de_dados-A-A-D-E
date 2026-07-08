@@ -325,3 +325,106 @@ CREATE TABLE lancamento_item (
    FOREIGN KEY (id_centro_custo_lancamento_item) REFERENCES centro_custo(id_centro_custo),
    CONSTRAINT chk_tipo_movimento_lancamento_item CHECK (tipo_movimento_lancamento_item IN ('D', 'C'))
 );
+
+-- 18. Tabela: SALDO_CONTABIL_MENSAL (motor de relatórios rápidos)
+CREATE TABLE saldo_contabil_mensal (
+   id_saldo_contabil_mensal BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_empresa_saldo_contabil_mensal BIGINT NOT NULL,
+   id_conta_saldo_contabil_mensal BIGINT NOT NULL,
+   competencia_saldo_contabil_mensal CHAR(7) NOT NULL,
+   saldo_inicial_saldo_contabil_mensal DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+   total_debitos_saldo_contabil_mensal DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+   total_creditos_saldo_contabil_mensal DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+   saldo_final_saldo_contabil_mensal DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+   FOREIGN KEY (id_empresa_saldo_contabil_mensal) REFERENCES empresa(id_empresa),
+   FOREIGN KEY (id_conta_saldo_contabil_mensal) REFERENCES conta(id_conta),
+   UNIQUE KEY uq_empresa_conta_competencia_saldo_contabil_mensal (
+       id_empresa_saldo_contabil_mensal,
+       id_conta_saldo_contabil_mensal,
+       competencia_saldo_contabil_mensal
+   )
+);
+ 
+ 
+-- ==============================================================================
+-- GRUPO 5: BANCÁRIO / FINANCEIRO
+-- ==============================================================================
+ 
+-- 19. Tabela: CONTA_BANCARIA
+CREATE TABLE conta_bancaria (
+   id_conta_bancaria BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_empresa_conta_bancaria BIGINT NOT NULL,
+   banco_conta_bancaria VARCHAR(100) NOT NULL,
+   codigo_banco_conta_bancaria VARCHAR(10) NOT NULL,
+   agencia_conta_bancaria VARCHAR(20) NOT NULL,
+   numero_conta_conta_bancaria VARCHAR(30) NOT NULL,
+   tipo_conta_bancaria VARCHAR(20) NOT NULL,
+   saldo_atual_conta_bancaria DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+   status_conta_bancaria VARCHAR(20) DEFAULT 'Ativa',
+   FOREIGN KEY (id_empresa_conta_bancaria) REFERENCES empresa(id_empresa),
+   CONSTRAINT chk_tipo_conta_bancaria CHECK (tipo_conta_bancaria IN ('Corrente', 'Poupança', 'Aplicação')),
+   CONSTRAINT chk_status_conta_bancaria CHECK (status_conta_bancaria IN ('Ativa', 'Inativa', 'Encerrada')),
+   -- CORRIGIDO (v4): constraint nomeada, para consistência com as demais
+   UNIQUE KEY uq_conta_bancaria_dados_bancarios (id_empresa_conta_bancaria, codigo_banco_conta_bancaria, agencia_conta_bancaria, numero_conta_conta_bancaria)
+);
+ 
+-- 20. Tabela: MOVIMENTACAO_BANCARIA
+CREATE TABLE movimentacao_bancaria (
+   id_movimentacao_bancaria BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_conta_bancaria_movimentacao_bancaria BIGINT NOT NULL,
+   data_movimentacao_bancaria DATE NOT NULL,
+   tipo_movimentacao_bancaria CHAR(1) NOT NULL,
+   valor_movimentacao_bancaria DECIMAL(15,2) NOT NULL,
+   descricao_movimentacao_bancaria VARCHAR(255) NOT NULL,
+   documento_referencia_movimentacao_bancaria VARCHAR(100),
+   conciliado_movimentacao_bancaria BOOLEAN DEFAULT FALSE,
+   id_lancamento_movimentacao_bancaria BIGINT, -- lançamento contábil gerado na conciliação
+   FOREIGN KEY (id_conta_bancaria_movimentacao_bancaria) REFERENCES conta_bancaria(id_conta_bancaria),
+   FOREIGN KEY (id_lancamento_movimentacao_bancaria) REFERENCES lancamento(id_lancamento),
+   CONSTRAINT chk_tipo_movimentacao_bancaria CHECK (tipo_movimentacao_bancaria IN ('D', 'C'))
+);
+CREATE INDEX idx_movimentacao_bancaria_conta_data ON movimentacao_bancaria(id_conta_bancaria_movimentacao_bancaria, data_movimentacao_bancaria);
+ 
+-- 21. Tabela: CONTA_PAGAR
+CREATE TABLE conta_pagar (
+   id_conta_pagar BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_empresa_conta_pagar BIGINT NOT NULL,
+   fornecedor_conta_pagar VARCHAR(255) NOT NULL,
+   cnpj_cpf_fornecedor_conta_pagar VARCHAR(14),
+   descricao_conta_pagar VARCHAR(255) NOT NULL,
+   valor_original_conta_pagar DECIMAL(15,2) NOT NULL,
+   valor_pago_conta_pagar DECIMAL(15,2),
+   data_emissao_conta_pagar DATE NOT NULL,
+   data_vencimento_conta_pagar DATE NOT NULL,
+   data_pagamento_conta_pagar DATE,
+   id_conta_bancaria_conta_pagar BIGINT,
+   id_documento_fiscal_conta_pagar BIGINT,
+   status_conta_pagar VARCHAR(20) DEFAULT 'Pendente',
+   FOREIGN KEY (id_empresa_conta_pagar) REFERENCES empresa(id_empresa),
+   FOREIGN KEY (id_conta_bancaria_conta_pagar) REFERENCES conta_bancaria(id_conta_bancaria),
+   FOREIGN KEY (id_documento_fiscal_conta_pagar) REFERENCES documento_fiscal(id_documento_fiscal),
+   CONSTRAINT chk_status_conta_pagar CHECK (status_conta_pagar IN ('Pendente', 'Pago', 'Atrasado', 'Cancelado'))
+);
+CREATE INDEX idx_conta_pagar_vencimento ON conta_pagar(id_empresa_conta_pagar, data_vencimento_conta_pagar, status_conta_pagar);
+ 
+-- 22. Tabela: CONTA_RECEBER
+CREATE TABLE conta_receber (
+   id_conta_receber BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_empresa_conta_receber BIGINT NOT NULL,
+   cliente_conta_receber VARCHAR(255) NOT NULL,
+   cnpj_cpf_cliente_conta_receber VARCHAR(14),
+   descricao_conta_receber VARCHAR(255) NOT NULL,
+   valor_original_conta_receber DECIMAL(15,2) NOT NULL,
+   valor_recebido_conta_receber DECIMAL(15,2),
+   data_emissao_conta_receber DATE NOT NULL,
+   data_vencimento_conta_receber DATE NOT NULL,
+   data_recebimento_conta_receber DATE,
+   id_conta_bancaria_conta_receber BIGINT,
+   id_documento_fiscal_conta_receber BIGINT,
+   status_conta_receber VARCHAR(20) DEFAULT 'Pendente',
+   FOREIGN KEY (id_empresa_conta_receber) REFERENCES empresa(id_empresa),
+   FOREIGN KEY (id_conta_bancaria_conta_receber) REFERENCES conta_bancaria(id_conta_bancaria),
+   FOREIGN KEY (id_documento_fiscal_conta_receber) REFERENCES documento_fiscal(id_documento_fiscal),
+   CONSTRAINT chk_status_conta_receber CHECK (status_conta_receber IN ('Pendente', 'Recebido', 'Atrasado', 'Cancelado'))
+);
+CREATE INDEX idx_conta_receber_vencimento ON conta_receber(id_empresa_conta_receber, data_vencimento_conta_receber, status_conta_receber);
