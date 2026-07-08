@@ -106,3 +106,134 @@ CREATE TABLE contato_empresa (
    CONSTRAINT chk_tipo_contato_empresa CHECK (tipo_contato_empresa IN ('Financeiro', 'Fiscal', 'Societário', 'Geral'))
 );
 CREATE INDEX idx_contato_empresa_empresa ON contato_empresa(id_empresa_contato_empresa);
+
+-- 7. Tabela: SOCIO
+CREATE TABLE socio (
+   id_socio BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_empresa_socio BIGINT NOT NULL,
+   nome_socio VARCHAR(255) NOT NULL,
+   cnpj_cpf_socio VARCHAR(14) NOT NULL,
+   percentual_participacao_socio DECIMAL(5,2) NOT NULL,
+   data_entrada_socio DATE NOT NULL,
+   data_saida_socio DATE,
+   administrador_socio BOOLEAN DEFAULT FALSE,
+   status_socio VARCHAR(20) DEFAULT 'Ativo',
+   FOREIGN KEY (id_empresa_socio) REFERENCES empresa(id_empresa),
+   CONSTRAINT chk_percentual_participacao_socio CHECK (percentual_participacao_socio BETWEEN 0 AND 100),
+   CONSTRAINT chk_status_socio CHECK (status_socio IN ('Ativo', 'Inativo'))
+);
+CREATE INDEX idx_socio_empresa ON socio(id_empresa_socio);
+ 
+-- 8. Tabela: CERTIFICADO_DIGITAL
+CREATE TABLE certificado_digital (
+   id_certificado_digital BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_empresa_certificado_digital BIGINT NOT NULL,
+   tipo_certificado_digital VARCHAR(10) NOT NULL,
+   numero_serie_certificado_digital VARCHAR(100) NOT NULL UNIQUE,
+   emissor_certificado_digital VARCHAR(255),
+   data_emissao_certificado_digital DATE NOT NULL,
+   data_validade_certificado_digital DATE NOT NULL,
+   arquivo_certificado_digital VARCHAR(512),
+   -- ALERTA DE SEGURANÇA: nunca armazenar a senha do certificado em texto puro.
+   -- Este campo deve guardar apenas uma referência/token de um cofre de segredos
+   -- (ex.: Vault, AWS Secrets Manager), nunca a senha em si.
+   referencia_senha_cofre_certificado_digital VARCHAR(255),
+   status_certificado_digital VARCHAR(20) DEFAULT 'Válido',
+   FOREIGN KEY (id_empresa_certificado_digital) REFERENCES empresa(id_empresa),
+   CONSTRAINT chk_tipo_certificado_digital CHECK (tipo_certificado_digital IN ('A1', 'A3')),
+   CONSTRAINT chk_status_certificado_digital CHECK (status_certificado_digital IN ('Válido', 'Vencido', 'Revogado'))
+);
+CREATE INDEX idx_certificado_digital_validade ON certificado_digital(data_validade_certificado_digital);
+ 
+ 
+-- ==============================================================================
+-- GRUPO 3: FISCAL
+-- ==============================================================================
+ 
+-- 9. Tabela: DOCUMENTO_FISCAL
+CREATE TABLE documento_fiscal (
+   id_documento_fiscal BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_empresa_documento_fiscal BIGINT NOT NULL,
+   tipo_documento_fiscal VARCHAR(10) NOT NULL,
+   direcao_documento_fiscal CHAR(1) NOT NULL,
+   numero_documento_fiscal INT NOT NULL,
+   serie_documento_fiscal VARCHAR(10) NOT NULL,
+   chave_acesso_documento_fiscal CHAR(44) NOT NULL UNIQUE,
+   data_emissao_documento_fiscal TIMESTAMP NOT NULL,
+   data_entrada_sistema_documento_fiscal TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   cfop_documento_fiscal VARCHAR(4) NOT NULL,
+   natureza_operacao_documento_fiscal VARCHAR(255) NOT NULL,
+   valor_produtos_documento_fiscal DECIMAL(15,2) NOT NULL,
+   valor_frete_documento_fiscal DECIMAL(15,2) DEFAULT 0.00,
+   valor_desconto_documento_fiscal DECIMAL(15,2) DEFAULT 0.00,
+   valor_icms_documento_fiscal DECIMAL(15,2) DEFAULT 0.00,
+   valor_ipi_documento_fiscal DECIMAL(15,2) DEFAULT 0.00,
+   valor_pis_documento_fiscal DECIMAL(15,2) DEFAULT 0.00,
+   valor_cofins_documento_fiscal DECIMAL(15,2) DEFAULT 0.00,
+   valor_total_documento_fiscal DECIMAL(15,2) NOT NULL,
+   status_documento_fiscal VARCHAR(20) NOT NULL,
+   arquivo_xml_documento_fiscal VARCHAR(512) NOT NULL,
+   arquivo_danfe_pdf_documento_fiscal VARCHAR(512),
+   nome_contraparte_documento_fiscal VARCHAR(255) NOT NULL,
+   cnpj_cpf_contraparte_documento_fiscal VARCHAR(14) NOT NULL,
+   FOREIGN KEY (id_empresa_documento_fiscal) REFERENCES empresa(id_empresa),
+   CONSTRAINT chk_direcao_documento_fiscal CHECK (direcao_documento_fiscal IN ('E', 'S')),
+   CONSTRAINT chk_status_documento_fiscal CHECK (status_documento_fiscal IN ('Autorizado', 'Cancelado', 'Inutilizado'))
+);
+CREATE INDEX idx_documento_fiscal_chave_acesso ON documento_fiscal(chave_acesso_documento_fiscal);
+CREATE INDEX idx_documento_fiscal_empresa_data ON documento_fiscal(id_empresa_documento_fiscal, data_emissao_documento_fiscal);
+ 
+-- 10. Tabela: ITEM_DOCUMENTO_FISCAL
+CREATE TABLE item_documento_fiscal (
+   id_item_documento_fiscal BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_documento_fiscal_item_documento_fiscal BIGINT NOT NULL,
+   numero_item_documento_fiscal INT NOT NULL, -- posição do item dentro do documento
+   codigo_produto_item_documento_fiscal VARCHAR(60) NOT NULL,
+   descricao_produto_item_documento_fiscal VARCHAR(255) NOT NULL,
+   ncm_item_documento_fiscal VARCHAR(8),
+   cfop_item_documento_fiscal VARCHAR(4) NOT NULL,
+   unidade_item_documento_fiscal VARCHAR(10),
+   quantidade_item_documento_fiscal DECIMAL(15,4) NOT NULL,
+   valor_unitario_item_documento_fiscal DECIMAL(15,4) NOT NULL,
+   valor_total_item_documento_fiscal DECIMAL(15,2) NOT NULL,
+   valor_icms_item_documento_fiscal DECIMAL(15,2) DEFAULT 0.00,
+   valor_ipi_item_documento_fiscal DECIMAL(15,2) DEFAULT 0.00,
+   id_conta_item_documento_fiscal BIGINT, -- classificação contábil do item (FK abaixo, criada após "conta")
+   FOREIGN KEY (id_documento_fiscal_item_documento_fiscal) REFERENCES documento_fiscal(id_documento_fiscal) ON DELETE CASCADE,
+   -- ADICIONADO (v4): impede dois itens com o mesmo número dentro do mesmo documento
+   UNIQUE KEY uq_item_documento_fiscal_numero (id_documento_fiscal_item_documento_fiscal, numero_item_documento_fiscal)
+);
+CREATE INDEX idx_item_documento_fiscal_documento ON item_documento_fiscal(id_documento_fiscal_item_documento_fiscal);
+ 
+-- 11. Tabela: IMPOSTO (catálogo de tributos)
+CREATE TABLE imposto (
+   id_imposto BIGINT AUTO_INCREMENT PRIMARY KEY,
+   nome_imposto VARCHAR(50) NOT NULL UNIQUE, -- ICMS, IPI, PIS, COFINS, ISS, IRPJ, CSLL, Simples Nacional...
+   esfera_imposto VARCHAR(20) NOT NULL,
+   aliquota_padrao_imposto DECIMAL(6,4),
+   status_imposto VARCHAR(20) DEFAULT 'Ativo',
+   CONSTRAINT chk_esfera_imposto CHECK (esfera_imposto IN ('Federal', 'Estadual', 'Municipal')),
+   CONSTRAINT chk_status_imposto CHECK (status_imposto IN ('Ativo', 'Inativo'))
+);
+ 
+-- 12. Tabela: CRONOGRAMA_TRIBUTARIO
+-- MELHORIA: "tipo_imposto" (texto livre) foi substituído por FK para a tabela
+-- IMPOSTO, evitando divergência de grafia (ex.: "ICMS" vs "Icms").
+CREATE TABLE cronograma_tributario (
+   id_cronograma_tributario BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_empresa_cronograma_tributario BIGINT NOT NULL,
+   id_imposto_cronograma_tributario BIGINT NOT NULL,
+   competencia_cronograma_tributario CHAR(7) NOT NULL,
+   data_vencimento_cronograma_tributario DATE NOT NULL,
+   valor_calculado_cronograma_tributario DECIMAL(15,2) NOT NULL,
+   valor_pago_cronograma_tributario DECIMAL(15,2),
+   data_pagamento_cronograma_tributario DATE,
+   status_cronograma_tributario VARCHAR(20) DEFAULT 'Pendente',
+   comprovante_pagamento_cronograma_tributario VARCHAR(512),
+   id_colaborador_resp_cronograma_tributario BIGINT,
+   FOREIGN KEY (id_empresa_cronograma_tributario) REFERENCES empresa(id_empresa),
+   FOREIGN KEY (id_imposto_cronograma_tributario) REFERENCES imposto(id_imposto),
+   FOREIGN KEY (id_colaborador_resp_cronograma_tributario) REFERENCES colaborador(id_colaborador),
+   CONSTRAINT chk_status_cronograma_tributario CHECK (status_cronograma_tributario IN ('Pendente', 'Pago', 'Atrasado', 'Isento'))
+);
+CREATE INDEX idx_cronograma_tributario_vencimento ON cronograma_tributario(data_vencimento_cronograma_tributario, status_cronograma_tributario);
