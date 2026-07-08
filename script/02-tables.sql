@@ -237,3 +237,91 @@ CREATE TABLE cronograma_tributario (
    CONSTRAINT chk_status_cronograma_tributario CHECK (status_cronograma_tributario IN ('Pendente', 'Pago', 'Atrasado', 'Isento'))
 );
 CREATE INDEX idx_cronograma_tributario_vencimento ON cronograma_tributario(data_vencimento_cronograma_tributario, status_cronograma_tributario);
+
+-- 13. Tabela: GUIA_PAGAMENTO
+CREATE TABLE guia_pagamento (
+   id_guia_pagamento BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_cronograma_tributario_guia_pagamento BIGINT NOT NULL,
+   codigo_barras_guia_pagamento VARCHAR(48),
+   linha_digitavel_guia_pagamento VARCHAR(60),
+   data_emissao_guia_pagamento DATE NOT NULL,
+   data_vencimento_guia_pagamento DATE NOT NULL,
+   valor_guia_pagamento DECIMAL(15,2) NOT NULL,
+   arquivo_guia_pagamento VARCHAR(512),
+   status_guia_pagamento VARCHAR(20) DEFAULT 'Emitida',
+   FOREIGN KEY (id_cronograma_tributario_guia_pagamento) REFERENCES cronograma_tributario(id_cronograma_tributario),
+   CONSTRAINT chk_status_guia_pagamento CHECK (status_guia_pagamento IN ('Emitida', 'Paga', 'Vencida', 'Cancelada'))
+);
+CREATE INDEX idx_guia_pagamento_cronograma ON guia_pagamento(id_cronograma_tributario_guia_pagamento);
+ 
+ 
+-- ==============================================================================
+-- GRUPO 4: CONTÁBIL
+-- ==============================================================================
+ 
+-- 14. Tabela: CONTA (plano de contas)
+CREATE TABLE conta (
+   id_conta BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_empresa_conta BIGINT NOT NULL,
+   codigo_conta VARCHAR(50) NOT NULL,
+   nome_conta VARCHAR(150) NOT NULL,
+   tipo_conta VARCHAR(30) NOT NULL,
+   id_conta_pai_conta BIGINT,
+   natureza_conta CHAR(1) NOT NULL,
+   FOREIGN KEY (id_empresa_conta) REFERENCES empresa(id_empresa),
+   FOREIGN KEY (id_conta_pai_conta) REFERENCES conta(id_conta),
+   CONSTRAINT chk_natureza_conta CHECK (natureza_conta IN ('D', 'C')),
+   CONSTRAINT chk_tipo_conta CHECK (tipo_conta IN ('Sintética', 'Analítica'))
+);
+ 
+-- Agora que "conta" existe, fechamos a FK pendente de item_documento_fiscal
+ALTER TABLE item_documento_fiscal
+   ADD CONSTRAINT fk_item_documento_fiscal_conta
+   FOREIGN KEY (id_conta_item_documento_fiscal) REFERENCES conta(id_conta);
+ 
+-- 15. Tabela: CENTRO_CUSTO
+CREATE TABLE centro_custo (
+   id_centro_custo BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_empresa_centro_custo BIGINT NOT NULL,
+   codigo_centro_custo VARCHAR(30) NOT NULL,
+   nome_centro_custo VARCHAR(150) NOT NULL,
+   id_centro_custo_pai_centro_custo BIGINT,
+   status_centro_custo VARCHAR(20) DEFAULT 'Ativo',
+   FOREIGN KEY (id_empresa_centro_custo) REFERENCES empresa(id_empresa),
+   FOREIGN KEY (id_centro_custo_pai_centro_custo) REFERENCES centro_custo(id_centro_custo),
+   CONSTRAINT chk_status_centro_custo CHECK (status_centro_custo IN ('Ativo', 'Inativo')),
+   -- CORRIGIDO (v4): constraint nomeada, para consistência com as demais
+   UNIQUE KEY uq_centro_custo_empresa_codigo (id_empresa_centro_custo, codigo_centro_custo)
+);
+ 
+-- 16. Tabela: LANCAMENTO (cabeçalho)
+CREATE TABLE lancamento (
+   id_lancamento BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_empresa_lancamento BIGINT NOT NULL,
+   data_lancamento DATE NOT NULL,
+   competencia_lancamento CHAR(7) NOT NULL,
+   historico_geral_lancamento TEXT NOT NULL,
+   id_documento_fiscal_origem_lancamento BIGINT,
+   tipo_origem_lancamento VARCHAR(30) DEFAULT 'Manual',
+   id_colaborador_resp_lancamento BIGINT,
+   FOREIGN KEY (id_empresa_lancamento) REFERENCES empresa(id_empresa),
+   FOREIGN KEY (id_documento_fiscal_origem_lancamento) REFERENCES documento_fiscal(id_documento_fiscal),
+   FOREIGN KEY (id_colaborador_resp_lancamento) REFERENCES colaborador(id_colaborador)
+);
+CREATE INDEX idx_lancamento_competencia ON lancamento(id_empresa_lancamento, competencia_lancamento);
+ 
+-- 17. Tabela: LANCAMENTO_ITEM
+-- MELHORIA: adicionada FK opcional para CENTRO_CUSTO, permitindo rateio de
+-- despesas/receitas por centro de custo diretamente na partida contábil.
+CREATE TABLE lancamento_item (
+   id_lancamento_item BIGINT AUTO_INCREMENT PRIMARY KEY,
+   id_lancamento_lancamento_item BIGINT NOT NULL,
+   id_conta_lancamento_item BIGINT NOT NULL,
+   id_centro_custo_lancamento_item BIGINT,
+   tipo_movimento_lancamento_item CHAR(1) NOT NULL,
+   valor_lancamento_item DECIMAL(15,2) NOT NULL,
+   FOREIGN KEY (id_lancamento_lancamento_item) REFERENCES lancamento(id_lancamento) ON DELETE CASCADE,
+   FOREIGN KEY (id_conta_lancamento_item) REFERENCES conta(id_conta),
+   FOREIGN KEY (id_centro_custo_lancamento_item) REFERENCES centro_custo(id_centro_custo),
+   CONSTRAINT chk_tipo_movimento_lancamento_item CHECK (tipo_movimento_lancamento_item IN ('D', 'C'))
+);
