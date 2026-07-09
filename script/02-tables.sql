@@ -26,25 +26,9 @@ CREATE TABLE colaborador (
 );
 CREATE INDEX idx_colaborador_cargo ON colaborador(id_cargo_colaborador);
  
--- 3. Tabela: USUARIO (acesso ao sistema, 1:1 com colaborador)
-CREATE TABLE usuario (
-   id_usuario BIGINT AUTO_INCREMENT PRIMARY KEY,
-   id_colaborador_usuario BIGINT NOT NULL UNIQUE,
-   login_usuario VARCHAR(50) NOT NULL UNIQUE,
-   senha_hash_usuario VARCHAR(255) NOT NULL, -- sempre armazenar hash (bcrypt/argon2), nunca texto puro
-   nivel_acesso_usuario VARCHAR(30) NOT NULL,
-   status_usuario VARCHAR(20) DEFAULT 'Ativo',
-   ultimo_login_usuario TIMESTAMP,
-   data_criacao_usuario TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-   FOREIGN KEY (id_colaborador_usuario) REFERENCES colaborador(id_colaborador),
-   CONSTRAINT chk_nivel_acesso_usuario CHECK (nivel_acesso_usuario IN ('Administrador', 'Contador', 'Assistente', 'Cliente')),
-   CONSTRAINT chk_status_usuario CHECK (status_usuario IN ('Ativo', 'Inativo', 'Bloqueado'))
-);
- 
 -- 4. Tabela: LOG_AUDITORIA
 CREATE TABLE log_auditoria (
    id_log_auditoria BIGINT AUTO_INCREMENT PRIMARY KEY,
-   id_usuario_log_auditoria BIGINT, -- nullable: ação automática do sistema não tem usuário
    tabela_afetada_log_auditoria VARCHAR(100) NOT NULL,
    id_registro_afetado_log_auditoria BIGINT NOT NULL,
    tipo_operacao_log_auditoria VARCHAR(20) NOT NULL,
@@ -52,7 +36,6 @@ CREATE TABLE log_auditoria (
    dados_novos_log_auditoria TEXT,
    ip_origem_log_auditoria VARCHAR(45),
    data_hora_log_auditoria TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-   FOREIGN KEY (id_usuario_log_auditoria) REFERENCES usuario(id_usuario),
    CONSTRAINT chk_tipo_operacao_log_auditoria CHECK (tipo_operacao_log_auditoria IN ('INSERT', 'UPDATE', 'DELETE'))
 );
 CREATE INDEX idx_log_auditoria_tabela ON log_auditoria(tabela_afetada_log_auditoria, id_registro_afetado_log_auditoria);
