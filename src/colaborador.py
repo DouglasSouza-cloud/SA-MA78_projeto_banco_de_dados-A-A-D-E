@@ -18,3 +18,4 @@ def listar_colaborador():
     conexao.close()
 
     return dados
+
