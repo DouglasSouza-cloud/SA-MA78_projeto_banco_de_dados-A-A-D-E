@@ -210,7 +210,6 @@ INSERT INTO cargo (nome_cargo, descricao_cargo, nivel_hierarquico_cargo, salario
 -- TABELA 2: COLABORADOR
 -- ======================================================================
 
--- INSERT único (multi-linha) com os 200 registros
 
 -- INSERT único (multi-linha) com 200 registros
 -- cpf_colaborador e' dado pessoal (PII) -> AES_ENCRYPT
