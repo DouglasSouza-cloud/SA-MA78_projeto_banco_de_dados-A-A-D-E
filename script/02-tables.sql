@@ -1,7 +1,8 @@
  -- 1. Tabela: CARGO
 CREATE TABLE cargo (
    id_cargo BIGINT AUTO_INCREMENT PRIMARY KEY,
-   nome_cargo VARCHAR(100) NOT NULL,
+   nome_cargo VARCHAR(100
+   ) NOT NULL,
    descricao_cargo TEXT,
    nivel_hierarquico_cargo INT NOT NULL DEFAULT 1,
    salario_base_cargo DECIMAL(15,2),
