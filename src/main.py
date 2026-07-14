@@ -1,19 +1,20 @@
-from colaborador import(
-listar_colaborador)
+from menus.menu_colaborador import menu_colaborador
+from menus.menu_empresa import menu_empresa
 
 while True:
 
-    print("\n====== SISTEMA INDUSTRIAL ======")
-    print("1 - Listar colaboradores")
-    print("2 - Cadastrar colaborador")
-    print("3 - Atualizar salário")
-    print("4 - Remover colaborador")
+    print("\n===== INOVE CONTABILIDADE =====")
+    print("1 - Colaboradores")
+    print("2 - Empresas")
     print("0 - Sair")
 
-    opcao=input("\nEscolha uma opção: ")
-    # listar
-    if opcao == "1":
-        colaboradores = listar_colaborador()
+    opcao = input("Escolha: ")
 
-    for colaborador in colaboradores:
-        print(colaborador)
+    if opcao == "1":
+        menu_colaborador()   # <-- chama o menu
+
+    elif opcao == "2":
+        menu_empresa()
+
+    elif opcao == "0":
+        break

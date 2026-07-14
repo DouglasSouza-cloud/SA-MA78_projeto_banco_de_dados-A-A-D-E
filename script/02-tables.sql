@@ -412,3 +412,57 @@ CREATE TABLE conta_receber (
    CONSTRAINT chk_status_conta_receber CHECK (status_conta_receber IN ('Pendente', 'Recebido', 'Atrasado', 'Cancelado'))
 );
 CREATE INDEX idx_conta_receber_vencimento ON conta_receber(id_empresa_conta_receber, data_vencimento_conta_receber, status_conta_receber);
+
+
+-- ==============================================================================
+-- SCRIPT DE CORREÇÃO: colunas que armazenam dados criptografados
+-- (AES_ENCRYPT + TO_BASE64) precisam de espaço maior que o tamanho do dado
+-- original em texto puro, pois o resultado cifrado + base64 é bem maior.
+--
+-- Rode este script ANTES de executar os seus INSERTs.
+-- ==============================================================================
+
+-- 1) colaborador.cpf_colaborador
+ALTER TABLE colaborador
+    MODIFY COLUMN cpf_colaborador VARCHAR(255) NOT NULL;
+
+-- 2) empresa.cnpj_empresa
+ALTER TABLE empresa
+    MODIFY COLUMN cnpj_empresa VARCHAR(255) NOT NULL;
+
+-- 3) socio.cnpj_cpf_socio
+ALTER TABLE socio
+    MODIFY COLUMN cnpj_cpf_socio VARCHAR(255) NOT NULL;
+
+-- 4) documento_fiscal.cnpj_cpf_contraparte_documento_fiscal
+ALTER TABLE documento_fiscal
+    MODIFY COLUMN cnpj_cpf_contraparte_documento_fiscal VARCHAR(255) NOT NULL;
+
+-- 5) conta_pagar.cnpj_cpf_fornecedor_conta_pagar
+ALTER TABLE conta_pagar
+    MODIFY COLUMN cnpj_cpf_fornecedor_conta_pagar VARCHAR(255);
+
+-- 6) conta_receber.cnpj_cpf_cliente_conta_receber
+ALTER TABLE conta_receber
+    MODIFY COLUMN cnpj_cpf_cliente_conta_receber VARCHAR(255);
+
+-- 7) conta_bancaria.agencia_conta_bancaria
+ALTER TABLE conta_bancaria
+    MODIFY COLUMN agencia_conta_bancaria VARCHAR(255) NOT NULL;
+
+-- 8) conta_bancaria.numero_conta_conta_bancaria
+ALTER TABLE conta_bancaria
+    MODIFY COLUMN numero_conta_conta_bancaria VARCHAR(255) NOT NULL;
+
+-- ==============================================================================
+-- Observações:
+-- - As UNIQUE KEYS existentes (cpf_colaborador, cnpj_empresa, e a composta
+--   uq_conta_bancaria_dados_bancarios) continuam válidas: MySQL/InnoDB (Dynamic
+--   ou Compressed row format, padrão a partir do MySQL 5.7+) suporta índices
+--   bem acima do necessário aqui, então nenhuma constraint foi removida.
+-- - Nenhuma outra estrutura (FKs, CHECKs, tipos de outras colunas) foi alterada.
+-- ==============================================================================
+
+ALTER TABLE guia_pagamento
+    MODIFY COLUMN codigo_barras_guia_pagamento VARCHAR(255);
+
