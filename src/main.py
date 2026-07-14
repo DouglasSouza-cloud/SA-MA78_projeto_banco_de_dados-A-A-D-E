@@ -1,20 +1,27 @@
+from menus.menu_cargo import menu_cargo
 from menus.menu_colaborador import menu_colaborador
-from menus.menu_empresa import menu_empresa
 
 while True:
 
-    print("\n===== INOVE CONTABILIDADE =====")
-    print("1 - Colaboradores")
-    print("2 - Empresas")
+    print("\n========================================")
+    print("       INOVE CONTABILIDADE")
+    print("========================================")
+    print("1 - Cargos")
+    print("2 - Colaboradores")
     print("0 - Sair")
+    print("========================================")
 
-    opcao = input("Escolha: ")
+    opcao = input("Escolha uma opção: ")
 
     if opcao == "1":
-        menu_colaborador()   # <-- chama o menu
+
+        menu_cargo()
 
     elif opcao == "2":
-        menu_empresa()
+
+        menu_colaborador()
 
     elif opcao == "0":
+
+        print("\nEncerrando o sistema...")
         break
