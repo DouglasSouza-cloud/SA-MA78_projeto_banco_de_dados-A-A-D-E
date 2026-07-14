@@ -11,33 +11,44 @@ def menu_colaborador():
 
     while True:
 
-        print("\n===== COLABORADORES =====")
-        print("1 - Cadastrar")
-        print("2 - Listar")
-        print("3 - Buscar")
-        print("4 - Atualizar")
-        print("5 - Remover")
+        print("\n========================================")
+        print("         MENU COLABORADORES")
+        print("========================================")
+        print("1 - Cadastrar Colaborador")
+        print("2 - Listar Colaboradores")
+        print("3 - Buscar Colaborador")
+        print("4 - Atualizar Colaborador")
+        print("5 - Remover Colaborador")
         print("0 - Voltar")
+        print("========================================")
 
-        opcao = input("Escolha: ")
+        opcao = input("Escolha uma opção: ")
 
         if opcao == "1":
+
             cadastrar_colaborador()
 
         elif opcao == "2":
+
             listar_colaborador()
 
         elif opcao == "3":
+
             buscar_colaborador()
 
         elif opcao == "4":
+
             atualizar_colaborador()
 
         elif opcao == "5":
+
             remover_colaborador()
 
         elif opcao == "0":
+
+            print("\nRetornando ao menu principal...")
             break
 
         else:
-            print("Opção inválida.")
+
+            print("\nOpção inválida! Tente novamente.")
