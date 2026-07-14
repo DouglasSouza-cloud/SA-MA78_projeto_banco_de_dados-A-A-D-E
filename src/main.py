@@ -13,4 +13,7 @@ while True:
     opcao=input("\nEscolha uma opção: ")
     # listar
     if opcao == "1":
-        listar_colaborador()
+        colaboradores = listar_colaborador()
+
+    for colaborador in colaboradores:
+        print(colaborador)

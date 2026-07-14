@@ -6,9 +6,9 @@ def listar_colaborador():
 
     sql = """
         SELECT
-            c.nome_colaborador,
-            c.cpf_colaborador
-        FROM colaborador c
+            nome_colaborador,
+            cpf_colaborador
+        FROM colaborador
     """
 
     cursor.execute(sql)
