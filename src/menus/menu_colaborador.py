@@ -5,24 +5,22 @@ from crud.colaborador import (
     atualizar_colaborador,
     remover_colaborador
 )
-
+from utils.formatacao import cabecalho_menu
 
 def menu_colaborador():
 
     while True:
 
-        print("\n========================================")
-        print("         MENU COLABORADORES")
-        print("========================================")
-        print("1 - Cadastrar Colaborador")
-        print("2 - Listar Colaboradores")
-        print("3 - Buscar Colaborador")
-        print("4 - Atualizar Colaborador")
-        print("5 - Remover Colaborador")
-        print("0 - Voltar")
-        print("========================================")
+        cabecalho_menu("MENU COLABORADORES")
 
-        opcao = input("Escolha uma opção: ")
+        print("[ 1 ] - Cadastrar Colaborador")
+        print("[ 2 ] - Listar Colaboradores")
+        print("[ 3 ] - Buscar Colaborador")
+        print("[ 4 ] - Atualizar Colaborador")
+        print("[ 5 ] - Remover Colaborador")
+        print("[ 0 ] - Voltar")
+
+        opcao = input("\n➤ Escolha uma opção: ")
 
         if opcao == "1":
 

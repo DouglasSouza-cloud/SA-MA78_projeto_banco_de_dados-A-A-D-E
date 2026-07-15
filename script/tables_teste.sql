@@ -1,8 +1,7 @@
-CREATE DATABASE INOVE_CONTABILIDADE;
-USE INOVE_CONTABILIDADE;
-DROP DATABASE INOVE_CONTABILIDADE;
+create database inove_teste;
+use inove_teste;
+drop database inove_teste;
 
- -- 1. Tabela: CARGO
 CREATE TABLE cargo (
    id_cargo BIGINT AUTO_INCREMENT PRIMARY KEY,
    nome_cargo VARCHAR(100
