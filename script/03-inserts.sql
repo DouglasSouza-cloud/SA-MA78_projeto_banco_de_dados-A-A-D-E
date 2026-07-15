@@ -1,7 +1,7 @@
 -- ======================================================================
 -- TABELA 1: CARGO
 -- ======================================================================
-
+SET @chave_aes = 'MinhaChaveSecreta123!';
 
 -- INSERT único (multi-linha) com 200 registros
 INSERT INTO cargo (nome_cargo, descricao_cargo, nivel_hierarquico_cargo, salario_base_cargo, status_cargo) VALUES
