@@ -1,4 +1,4 @@
-- 1) Empresas ativas com o nome do colaborador responsável e o cargo dele
+-- 1) Empresas ativas com o nome do colaborador responsável e o cargo dele
 SELECT
     e.razao_social_empresa,
     e.uf_empresa,

@@ -1,3 +1,12 @@
+from util.cores import (
+    AZUL_CLARO,
+    VERDE,
+    AMARELO,
+    VERMELHO,
+    NEGRITO,
+    RESET
+)
+
 from crud.empresa import (
     cadastrar_empresa,
     listar_empresa,
@@ -11,33 +20,46 @@ def menu_empresa():
 
     while True:
 
-        print("\n===== EMPRESAS =====")
-        print("1 - Cadastrar empresa")
-        print("2 - Listar empresas")
-        print("3 - Buscar empresa")
-        print("4 - Atualizar empresa")
-        print("5 - Remover empresa")
-        print("0 - Voltar")
+        print(f"{AZUL_CLARO}╭────────────────────────────────────────────╮{RESET}")
+        print(f"{AZUL_CLARO}│{RESET} {NEGRITO}{VERDE}            MENU EMPRESAS{RESET}                {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}├────────────────────────────────────────────┤{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 1 ]{RESET} - Cadastrar Empresa               {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 2 ]{RESET} - Listar Empresas                 {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 3 ]{RESET} - Buscar Empresa                  {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 4 ]{RESET} - Atualizar Empresa               {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 5 ]{RESET} - Remover Empresa                 {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {VERMELHO}[ 0 ]{RESET} - Voltar                          {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}╰────────────────────────────────────────────╯{RESET}")
 
-        opcao = input("\nEscolha uma opção: ")
+        opcao = input(f" {NEGRITO}➤ Escolha uma opção:{RESET} ")
 
         if opcao == "1":
+
             cadastrar_empresa()
 
         elif opcao == "2":
+
             listar_empresa()
 
         elif opcao == "3":
+
             buscar_empresa()
 
         elif opcao == "4":
+
             atualizar_empresa()
 
         elif opcao == "5":
+
             remover_empresa()
 
         elif opcao == "0":
+
             break
 
         else:
-            print("\nOpção inválida.")
+
+            print("\nOpção inválida!")
