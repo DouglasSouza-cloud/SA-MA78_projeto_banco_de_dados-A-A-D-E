@@ -182,6 +182,8 @@ def buscar_colaborador():
         cursor = conexao.cursor()
 
         id_colaborador = int(input("Informe o ID do colaborador: "))
+        nome_colaborador = input("Informe o nome do colaborador (ou pressione Enter para pular): ")
+
 
         sql = """
             SELECT
@@ -198,10 +200,10 @@ def buscar_colaborador():
             FROM colaborador c
             INNER JOIN cargo ca
                 ON ca.id_cargo = c.id_cargo_colaborador
-            WHERE c.id_colaborador = %s
+            WHERE c.id_colaborador = %s AND c.nome_colaborador = %s
         """
 
-        cursor.execute(sql, (id_colaborador,))
+        cursor.execute(sql, (id_colaborador, nome_colaborador))
 
         colaborador = cursor.fetchone()
 
