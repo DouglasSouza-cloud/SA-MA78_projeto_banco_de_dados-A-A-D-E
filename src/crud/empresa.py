@@ -247,6 +247,7 @@ def buscar_empresa():
         cursor = conexao.cursor()
 
         id_empresa = int(input("Informe o ID da empresa: "))
+        nome_empresa = input("Informe o nome da empresa: ")
 
         sql = """
             SELECT
@@ -278,7 +279,7 @@ def buscar_empresa():
             WHERE e.id_empresa = %s
         """
 
-        cursor.execute(sql, (id_empresa,))
+        cursor.execute(sql, (id_empresa, nome_empresa))
 
         empresa = cursor.fetchone()
 
