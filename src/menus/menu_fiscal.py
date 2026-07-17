@@ -1,3 +1,4 @@
+from menus.menu_documento_fiscal import menu_documento_fiscal
 from util.cores import (
     AZUL_CLARO,
     VERDE,
@@ -36,8 +37,8 @@ def menu_fiscal():
 
         elif opcao == "2":
 
-            print("\nMódulo em desenvolvimento.")
-
+            menu_documento_fiscal()
+            
         elif opcao == "3":
 
             print("\nMódulo em desenvolvimento.")
