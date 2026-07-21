@@ -7,25 +7,30 @@ from util.cores import (
     RESET
 )
 
-from menus.menu_conta import menu_conta
-from menus.menu_centro_custo import menu_centro_custo
-from menus.menu_lancamento import menu_lancamento
+from crud.lancamento import (
+    cadastrar_lancamento,
+    listar_lancamento,
+    buscar_lancamento,
+    atualizar_lancamento,
+    remover_lancamento
+)
 
-def menu_contabil():
+
+def menu_lancamento():
 
     while True:
 
         print(f"{AZUL_CLARO}╭────────────────────────────────────────────╮{RESET}")
-        print(f"{AZUL_CLARO}│{RESET} {NEGRITO}{VERDE}          MÓDULO CONTÁBIL{RESET}                {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET} {NEGRITO}{VERDE}        MENU LANÇAMENTOS{RESET}              {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}├────────────────────────────────────────────┤{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 1 ]{RESET} - Contas                        {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 2 ]{RESET} - Centro de Custos                        {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 3 ]{RESET} - Lançamentos                          {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 4 ]{RESET} - Itens de Lançamento           {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 5 ]{RESET} - Saldos Contábeis Mensais          {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 1 ]{RESET} - Cadastrar Lançamento          {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 2 ]{RESET} - Listar Lançamentos            {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 3 ]{RESET} - Buscar Lançamento             {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 4 ]{RESET} - Atualizar Lançamento          {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 5 ]{RESET} - Remover Lançamento            {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {VERMELHO}[ 0 ]{RESET} - Voltar                          {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {VERMELHO}[ 0 ]{RESET} - Voltar                        {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}╰────────────────────────────────────────────╯{RESET}")
 
@@ -33,23 +38,23 @@ def menu_contabil():
 
         if opcao == "1":
 
-            menu_conta()
+            cadastrar_lancamento()
 
         elif opcao == "2":
 
-            menu_centro_custo()
+            listar_lancamento()
 
         elif opcao == "3":
 
-            menu_lancamento()
+            buscar_lancamento()
 
         elif opcao == "4":
 
-            print("\nOpção em Desenvolvimento")
+            atualizar_lancamento()
 
         elif opcao == "5":
 
-            print("\nOpção em Desenvolvimento")
+            remover_lancamento()
 
         elif opcao == "0":
 

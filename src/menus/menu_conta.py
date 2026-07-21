@@ -7,25 +7,30 @@ from util.cores import (
     RESET
 )
 
-from menus.menu_conta import menu_conta
-from menus.menu_centro_custo import menu_centro_custo
-from menus.menu_lancamento import menu_lancamento
+from crud.conta import (
+    cadastrar_conta,
+    listar_conta,
+    buscar_conta,
+    atualizar_conta,
+    remover_conta
+)
 
-def menu_contabil():
+
+def menu_conta():
 
     while True:
 
         print(f"{AZUL_CLARO}╭────────────────────────────────────────────╮{RESET}")
-        print(f"{AZUL_CLARO}│{RESET} {NEGRITO}{VERDE}          MÓDULO CONTÁBIL{RESET}                {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET} {NEGRITO}{VERDE}            MENU CONTAS{RESET}                  {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}├────────────────────────────────────────────┤{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 1 ]{RESET} - Contas                        {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 2 ]{RESET} - Centro de Custos                        {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 3 ]{RESET} - Lançamentos                          {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 4 ]{RESET} - Itens de Lançamento           {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 5 ]{RESET} - Saldos Contábeis Mensais          {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 1 ]{RESET} - Cadastrar Conta                {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 2 ]{RESET} - Listar Contas                  {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 3 ]{RESET} - Buscar Conta                   {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 4 ]{RESET} - Atualizar Conta                {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 5 ]{RESET} - Remover Conta                  {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {VERMELHO}[ 0 ]{RESET} - Voltar                          {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {VERMELHO}[ 0 ]{RESET} - Voltar                         {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}╰────────────────────────────────────────────╯{RESET}")
 
@@ -33,23 +38,23 @@ def menu_contabil():
 
         if opcao == "1":
 
-            menu_conta()
+            cadastrar_conta()
 
         elif opcao == "2":
 
-            menu_centro_custo()
+            listar_conta()
 
         elif opcao == "3":
 
-            menu_lancamento()
+            buscar_conta()
 
         elif opcao == "4":
 
-            print("\nOpção em Desenvolvimento")
+            atualizar_conta()
 
         elif opcao == "5":
 
-            print("\nOpção em Desenvolvimento")
+            remover_conta()
 
         elif opcao == "0":
 

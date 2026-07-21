@@ -4,6 +4,7 @@ from menus.menu_rh import menu_rh
 from menus.menu_empresas import menu_empresas
 
 from menus.menu_fiscal import menu_fiscal
+from menus.menu_contabil import menu_contabil
 
 
 def menu_principal():
@@ -23,6 +24,10 @@ def menu_principal():
         elif opcao == "3":
 
             menu_fiscal()
+        
+        elif opcao == "4":
+
+            menu_contabil() 
 
         elif opcao == "0":
 

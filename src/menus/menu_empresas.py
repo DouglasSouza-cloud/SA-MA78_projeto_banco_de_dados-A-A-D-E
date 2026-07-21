@@ -10,6 +10,7 @@ from util.cores import (
 from menus.menu_empresa import menu_empresa
 from menus.menu_socio import menu_socio
 from menus.menu_contato_empresa import menu_contato_empresa
+from menus.menu_certificado_digital import menu_certificado_digital
 
 
 def menu_empresas():
@@ -45,7 +46,7 @@ def menu_empresas():
 
         elif opcao == "4":
 
-            print("\nMódulo em desenvolvimento.")
+            menu_certificado_digital()
 
         elif opcao == "0":
 
