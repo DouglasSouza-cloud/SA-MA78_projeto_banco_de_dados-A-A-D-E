@@ -7,28 +7,28 @@ from util.cores import (
     RESET
 )
 
-from crud.socio import (
-    cadastrar_socio,
-    listar_socio,
-    buscar_socio,
-    atualizar_socio,
-    remover_socio
+from crud.contato_empresa import (
+    cadastrar_contato_empresa,
+    listar_contato_empresa,
+    buscar_contato_empresa,
+    atualizar_contato_empresa,
+    remover_contato_empresa
 )
 
 
-def menu_socio():
+def menu_contato_empresa():
 
     while True:
 
         print(f"{AZUL_CLARO}╭────────────────────────────────────────────╮{RESET}")
-        print(f"{AZUL_CLARO}│{RESET} {NEGRITO}{VERDE}             MENU SÓCIO{RESET}                 {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET} {NEGRITO}{VERDE}        MENU CONTATO EMPRESA{RESET}            {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}├────────────────────────────────────────────┤{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 1 ]{RESET} - Cadastrar Sócio                 {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 2 ]{RESET} - Listar Sócios                   {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 3 ]{RESET} - Buscar Sócio                    {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 4 ]{RESET} - Atualizar Sócio                 {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 5 ]{RESET} - Remover Sócio                   {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 1 ]{RESET} - Cadastrar Contato               {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 2 ]{RESET} - Listar Contatos                 {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 3 ]{RESET} - Buscar Contato                  {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 4 ]{RESET} - Atualizar Contato               {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 5 ]{RESET} - Remover Contato                 {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}│{RESET}   {VERMELHO}[ 0 ]{RESET} - Voltar                         {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
@@ -38,23 +38,23 @@ def menu_socio():
 
         if opcao == "1":
 
-            cadastrar_socio()
+            cadastrar_contato_empresa()
 
         elif opcao == "2":
 
-            listar_socio()
+            listar_contato_empresa()
 
         elif opcao == "3":
 
-            buscar_socio()
+            buscar_contato_empresa()
 
         elif opcao == "4":
 
-            atualizar_socio()
+            atualizar_contato_empresa()
 
         elif opcao == "5":
 
-            remover_socio()
+            remover_contato_empresa()
 
         elif opcao == "0":
 

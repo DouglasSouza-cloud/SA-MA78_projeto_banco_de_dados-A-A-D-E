@@ -1,6 +1,8 @@
 from menus.menu_documento_fiscal import menu_documento_fiscal
 from menus.menu_item_documento_fiscal import menu_item_documento_fiscal
 from menus.menu_cronograma_tributario import menu_cronograma_tributario
+from menus.menu_guia_pagamento import menu_guia_pagamento
+from menus.menu_socio import menu_socio
 
 from util.cores import (
     AZUL_CLARO,
@@ -52,7 +54,7 @@ def menu_fiscal():
 
         elif opcao == "5":
 
-            print("\nMódulo em desenvolvimento.")
+            menu_guia_pagamento()
 
         elif opcao == "0":
 

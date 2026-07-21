@@ -7,28 +7,28 @@ from util.cores import (
     RESET
 )
 
-from crud.socio import (
-    cadastrar_socio,
-    listar_socio,
-    buscar_socio,
-    atualizar_socio,
-    remover_socio
+from crud.guia_pagamento import (
+    cadastrar_guia_pagamento,
+    listar_guia_pagamento,
+    buscar_guia_pagamento,
+    atualizar_guia_pagamento,
+    remover_guia_pagamento
 )
 
 
-def menu_socio():
+def menu_guia_pagamento():
 
     while True:
 
         print(f"{AZUL_CLARO}╭────────────────────────────────────────────╮{RESET}")
-        print(f"{AZUL_CLARO}│{RESET} {NEGRITO}{VERDE}             MENU SÓCIO{RESET}                 {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET} {NEGRITO}{VERDE}      MENU GUIA DE PAGAMENTO{RESET}          {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}├────────────────────────────────────────────┤{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 1 ]{RESET} - Cadastrar Sócio                 {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 2 ]{RESET} - Listar Sócios                   {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 3 ]{RESET} - Buscar Sócio                    {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 4 ]{RESET} - Atualizar Sócio                 {AZUL_CLARO}│{RESET}")
-        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 5 ]{RESET} - Remover Sócio                   {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 1 ]{RESET} - Cadastrar Guia                  {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 2 ]{RESET} - Listar Guias                    {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 3 ]{RESET} - Buscar Guia                     {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 4 ]{RESET} - Atualizar Guia                  {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 5 ]{RESET} - Remover Guia                    {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}│{RESET}   {VERMELHO}[ 0 ]{RESET} - Voltar                         {AZUL_CLARO}│{RESET}")
         print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
@@ -38,23 +38,23 @@ def menu_socio():
 
         if opcao == "1":
 
-            cadastrar_socio()
+            cadastrar_guia_pagamento()
 
         elif opcao == "2":
 
-            listar_socio()
+            listar_guia_pagamento()
 
         elif opcao == "3":
 
-            buscar_socio()
+            buscar_guia_pagamento()
 
         elif opcao == "4":
 
-            atualizar_socio()
+            atualizar_guia_pagamento()
 
         elif opcao == "5":
 
-            remover_socio()
+            remover_guia_pagamento()
 
         elif opcao == "0":
 

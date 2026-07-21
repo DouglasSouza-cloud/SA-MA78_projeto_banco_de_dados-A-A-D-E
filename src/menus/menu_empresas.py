@@ -8,6 +8,8 @@ from util.cores import (
 )
 
 from menus.menu_empresa import menu_empresa
+from menus.menu_socio import menu_socio
+from menus.menu_contato_empresa import menu_contato_empresa
 
 
 def menu_empresas():
@@ -35,11 +37,11 @@ def menu_empresas():
 
         elif opcao == "2":
 
-            print("\nMódulo em desenvolvimento.")
+            menu_contato_empresa()
 
         elif opcao == "3":
 
-            print("\nMódulo em desenvolvimento.")
+            menu_socio()
 
         elif opcao == "4":
 
