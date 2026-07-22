@@ -10,6 +10,8 @@ from util.cores import (
 from menus.menu_conta import menu_conta
 from menus.menu_centro_custo import menu_centro_custo
 from menus.menu_lancamento import menu_lancamento
+from menus.menu_lancamento_item import menu_lancamento_item
+from menus.menu_saldo_contmensal import menu_saldo_contmensal
 
 def menu_contabil():
 
@@ -45,11 +47,11 @@ def menu_contabil():
 
         elif opcao == "4":
 
-            print("\nOpção em Desenvolvimento")
+            menu_lancamento_item()
 
         elif opcao == "5":
 
-            print("\nOpção em Desenvolvimento")
+            menu_saldo_contmensal()
 
         elif opcao == "0":
 
