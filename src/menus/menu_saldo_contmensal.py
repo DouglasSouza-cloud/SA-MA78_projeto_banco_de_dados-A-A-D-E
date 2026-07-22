@@ -16,7 +16,7 @@ from crud.saldo_contabil_mensal import (
 )
 
 
-def menu_saldo_contabil_mensal():
+def menu_saldo_contmensal():
 
     while True:
 
