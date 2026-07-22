@@ -179,7 +179,7 @@ Informando:
 ## 4. Execute
 
 ```bash
-python src/main.py ou clique no botão de rodar direto na main.py
+python src/main.py ou clique na ferramenta para rodar o código direto na main.py
 ```
 
 ---
