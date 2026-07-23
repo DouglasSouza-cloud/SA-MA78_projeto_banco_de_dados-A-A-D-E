@@ -1,15 +1,14 @@
- -- 1. Tabela: CARGO
+-- 1. Tabela: CARGO
 CREATE TABLE cargo (
    id_cargo BIGINT AUTO_INCREMENT PRIMARY KEY,
-   nome_cargo VARCHAR(100
-   ) NOT NULL,
+   nome_cargo VARCHAR(100) NOT NULL,
    descricao_cargo TEXT,
    nivel_hierarquico_cargo INT NOT NULL DEFAULT 1,
    salario_base_cargo DECIMAL(15,2),
    status_cargo VARCHAR(20) DEFAULT 'Ativo',
    CONSTRAINT chk_status_cargo CHECK (status_cargo IN ('Ativo', 'Inativo'))
 );
- 
+
 -- 2. Tabela: COLABORADOR
 CREATE TABLE colaborador (
    id_colaborador BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -26,8 +25,9 @@ CREATE TABLE colaborador (
    CONSTRAINT chk_status_colaborador CHECK (status_colaborador IN ('Ativo', 'Inativo', 'Afastado', 'Demitido'))
 );
 CREATE INDEX idx_colaborador_cargo ON colaborador(id_cargo_colaborador);
- 
--- 4. Tabela: LOG_AUDITORIA
+
+
+-- 3. Tabela: LOG_AUDITORIA
 CREATE TABLE log_auditoria (
    id_log_auditoria BIGINT AUTO_INCREMENT PRIMARY KEY,
    tabela_afetada_log_auditoria VARCHAR(100) NOT NULL,
@@ -41,13 +41,9 @@ CREATE TABLE log_auditoria (
 );
 CREATE INDEX idx_log_auditoria_tabela ON log_auditoria(tabela_afetada_log_auditoria, id_registro_afetado_log_auditoria);
 CREATE INDEX idx_log_auditoria_data ON log_auditoria(data_hora_log_auditoria);
- 
- 
--- ==============================================================================
--- GRUPO 2: EMPRESA
--- ==============================================================================
- 
--- 5. Tabela: EMPRESA
+
+
+-- 4. Tabela: EMPRESA
 CREATE TABLE empresa (
    id_empresa BIGINT AUTO_INCREMENT PRIMARY KEY,
    razao_social_empresa VARCHAR(255) NOT NULL,
@@ -75,8 +71,9 @@ CREATE TABLE empresa (
    CONSTRAINT chk_status_empresa CHECK (status_empresa IN ('Ativo', 'Inativo', 'Suspenso'))
 );
 CREATE INDEX idx_empresa_cnpj ON empresa(cnpj_empresa);
- 
--- 6. Tabela: CONTATO_EMPRESA
+
+
+-- 5. Tabela: CONTATO_EMPRESA
 CREATE TABLE contato_empresa (
    id_contato_empresa BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_empresa_contato_empresa BIGINT NOT NULL,
@@ -91,7 +88,8 @@ CREATE TABLE contato_empresa (
 );
 CREATE INDEX idx_contato_empresa_empresa ON contato_empresa(id_empresa_contato_empresa);
 
--- 7. Tabela: SOCIO
+
+-- 6. Tabela: SOCIO
 CREATE TABLE socio (
    id_socio BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_empresa_socio BIGINT NOT NULL,
@@ -107,8 +105,9 @@ CREATE TABLE socio (
    CONSTRAINT chk_status_socio CHECK (status_socio IN ('Ativo', 'Inativo'))
 );
 CREATE INDEX idx_socio_empresa ON socio(id_empresa_socio);
- 
--- 8. Tabela: CERTIFICADO_DIGITAL
+
+
+-- 7. Tabela: CERTIFICADO_DIGITAL
 CREATE TABLE certificado_digital (
    id_certificado_digital BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_empresa_certificado_digital BIGINT NOT NULL,
@@ -128,13 +127,9 @@ CREATE TABLE certificado_digital (
    CONSTRAINT chk_status_certificado_digital CHECK (status_certificado_digital IN ('Válido', 'Vencido', 'Revogado'))
 );
 CREATE INDEX idx_certificado_digital_validade ON certificado_digital(data_validade_certificado_digital);
- 
- 
--- ==============================================================================
--- GRUPO 3: FISCAL
--- ==============================================================================
- 
--- 9. Tabela: DOCUMENTO_FISCAL
+
+
+-- 8. Tabela: DOCUMENTO_FISCAL
 CREATE TABLE documento_fiscal (
    id_documento_fiscal BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_empresa_documento_fiscal BIGINT NOT NULL,
@@ -166,8 +161,9 @@ CREATE TABLE documento_fiscal (
 );
 CREATE INDEX idx_documento_fiscal_chave_acesso ON documento_fiscal(chave_acesso_documento_fiscal);
 CREATE INDEX idx_documento_fiscal_empresa_data ON documento_fiscal(id_empresa_documento_fiscal, data_emissao_documento_fiscal);
- 
--- 10. Tabela: ITEM_DOCUMENTO_FISCAL
+
+
+-- 9. Tabela: ITEM_DOCUMENTO_FISCAL
 CREATE TABLE item_documento_fiscal (
    id_item_documento_fiscal BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_documento_fiscal_item_documento_fiscal BIGINT NOT NULL,
@@ -188,8 +184,9 @@ CREATE TABLE item_documento_fiscal (
    UNIQUE KEY uq_item_documento_fiscal_numero (id_documento_fiscal_item_documento_fiscal, numero_item_documento_fiscal)
 );
 CREATE INDEX idx_item_documento_fiscal_documento ON item_documento_fiscal(id_documento_fiscal_item_documento_fiscal);
- 
--- 11. Tabela: IMPOSTO (catálogo de tributos)
+
+
+-- 10. Tabela: IMPOSTO (catálogo de tributos)
 CREATE TABLE imposto (
    id_imposto BIGINT AUTO_INCREMENT PRIMARY KEY,
    nome_imposto VARCHAR(50) NOT NULL UNIQUE, -- ICMS, IPI, PIS, COFINS, ISS, IRPJ, CSLL, Simples Nacional...
@@ -199,8 +196,9 @@ CREATE TABLE imposto (
    CONSTRAINT chk_esfera_imposto CHECK (esfera_imposto IN ('Federal', 'Estadual', 'Municipal')),
    CONSTRAINT chk_status_imposto CHECK (status_imposto IN ('Ativo', 'Inativo'))
 );
- 
--- 12. Tabela: CRONOGRAMA_TRIBUTARIO
+
+
+-- 11. Tabela: CRONOGRAMA_TRIBUTARIO
 -- MELHORIA: "tipo_imposto" (texto livre) foi substituído por FK para a tabela
 -- IMPOSTO, evitando divergência de grafia (ex.: "ICMS" vs "Icms").
 CREATE TABLE cronograma_tributario (
@@ -222,7 +220,8 @@ CREATE TABLE cronograma_tributario (
 );
 CREATE INDEX idx_cronograma_tributario_vencimento ON cronograma_tributario(data_vencimento_cronograma_tributario, status_cronograma_tributario);
 
--- 13. Tabela: GUIA_PAGAMENTO
+
+-- 12. Tabela: GUIA_PAGAMENTO
 CREATE TABLE guia_pagamento (
    id_guia_pagamento BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_cronograma_tributario_guia_pagamento BIGINT NOT NULL,
@@ -237,13 +236,9 @@ CREATE TABLE guia_pagamento (
    CONSTRAINT chk_status_guia_pagamento CHECK (status_guia_pagamento IN ('Emitida', 'Paga', 'Vencida', 'Cancelada'))
 );
 CREATE INDEX idx_guia_pagamento_cronograma ON guia_pagamento(id_cronograma_tributario_guia_pagamento);
- 
- 
--- ==============================================================================
--- GRUPO 4: CONTÁBIL
--- ==============================================================================
- 
--- 14. Tabela: CONTA (plano de contas)
+
+
+-- 13. Tabela: CONTA (plano de contas)
 CREATE TABLE conta (
    id_conta BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_empresa_conta BIGINT NOT NULL,
@@ -257,13 +252,15 @@ CREATE TABLE conta (
    CONSTRAINT chk_natureza_conta CHECK (natureza_conta IN ('D', 'C')),
    CONSTRAINT chk_tipo_conta CHECK (tipo_conta IN ('Sintética', 'Analítica'))
 );
- 
+
+
 -- Agora que "conta" existe, fechamos a FK pendente de item_documento_fiscal
 ALTER TABLE item_documento_fiscal
    ADD CONSTRAINT fk_item_documento_fiscal_conta
    FOREIGN KEY (id_conta_item_documento_fiscal) REFERENCES conta(id_conta);
- 
--- 15. Tabela: CENTRO_CUSTO
+
+
+-- 14. Tabela: CENTRO_CUSTO
 CREATE TABLE centro_custo (
    id_centro_custo BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_empresa_centro_custo BIGINT NOT NULL,
@@ -277,8 +274,9 @@ CREATE TABLE centro_custo (
    -- CORRIGIDO (v4): constraint nomeada, para consistência com as demais
    UNIQUE KEY uq_centro_custo_empresa_codigo (id_empresa_centro_custo, codigo_centro_custo)
 );
- 
--- 16. Tabela: LANCAMENTO (cabeçalho)
+
+
+-- 15. Tabela: LANCAMENTO (cabeçalho)
 CREATE TABLE lancamento (
    id_lancamento BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_empresa_lancamento BIGINT NOT NULL,
@@ -293,8 +291,9 @@ CREATE TABLE lancamento (
    FOREIGN KEY (id_colaborador_resp_lancamento) REFERENCES colaborador(id_colaborador)
 );
 CREATE INDEX idx_lancamento_competencia ON lancamento(id_empresa_lancamento, competencia_lancamento);
- 
--- 17. Tabela: LANCAMENTO_ITEM
+
+
+-- 16. Tabela: LANCAMENTO_ITEM
 -- MELHORIA: adicionada FK opcional para CENTRO_CUSTO, permitindo rateio de
 -- despesas/receitas por centro de custo diretamente na partida contábil.
 CREATE TABLE lancamento_item (
@@ -310,7 +309,8 @@ CREATE TABLE lancamento_item (
    CONSTRAINT chk_tipo_movimento_lancamento_item CHECK (tipo_movimento_lancamento_item IN ('D', 'C'))
 );
 
--- 18. Tabela: SALDO_CONTABIL_MENSAL (motor de relatórios rápidos)
+
+-- 17. Tabela: SALDO_CONTABIL_MENSAL (motor de relatórios rápidos)
 CREATE TABLE saldo_contabil_mensal (
    id_saldo_contabil_mensal BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_empresa_saldo_contabil_mensal BIGINT NOT NULL,
@@ -328,13 +328,9 @@ CREATE TABLE saldo_contabil_mensal (
        competencia_saldo_contabil_mensal
    )
 );
- 
- 
--- ==============================================================================
--- GRUPO 5: BANCÁRIO / FINANCEIRO
--- ==============================================================================
- 
--- 19. Tabela: CONTA_BANCARIA
+
+
+-- 18. Tabela: CONTA_BANCARIA
 CREATE TABLE conta_bancaria (
    id_conta_bancaria BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_empresa_conta_bancaria BIGINT NOT NULL,
@@ -351,8 +347,9 @@ CREATE TABLE conta_bancaria (
    -- CORRIGIDO (v4): constraint nomeada, para consistência com as demais
    UNIQUE KEY uq_conta_bancaria_dados_bancarios (id_empresa_conta_bancaria, codigo_banco_conta_bancaria, agencia_conta_bancaria, numero_conta_conta_bancaria)
 );
- 
--- 20. Tabela: MOVIMENTACAO_BANCARIA
+
+
+-- 19. Tabela: MOVIMENTACAO_BANCARIA
 CREATE TABLE movimentacao_bancaria (
    id_movimentacao_bancaria BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_conta_bancaria_movimentacao_bancaria BIGINT NOT NULL,
@@ -368,8 +365,9 @@ CREATE TABLE movimentacao_bancaria (
    CONSTRAINT chk_tipo_movimentacao_bancaria CHECK (tipo_movimentacao_bancaria IN ('D', 'C'))
 );
 CREATE INDEX idx_movimentacao_bancaria_conta_data ON movimentacao_bancaria(id_conta_bancaria_movimentacao_bancaria, data_movimentacao_bancaria);
- 
--- 21. Tabela: CONTA_PAGAR
+
+
+-- 20. Tabela: CONTA_PAGAR
 CREATE TABLE conta_pagar (
    id_conta_pagar BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_empresa_conta_pagar BIGINT NOT NULL,
@@ -390,8 +388,9 @@ CREATE TABLE conta_pagar (
    CONSTRAINT chk_status_conta_pagar CHECK (status_conta_pagar IN ('Pendente', 'Pago', 'Atrasado', 'Cancelado'))
 );
 CREATE INDEX idx_conta_pagar_vencimento ON conta_pagar(id_empresa_conta_pagar, data_vencimento_conta_pagar, status_conta_pagar);
- 
--- 22. Tabela: CONTA_RECEBER
+
+
+-- 21. Tabela: CONTA_RECEBER
 CREATE TABLE conta_receber (
    id_conta_receber BIGINT AUTO_INCREMENT PRIMARY KEY,
    id_empresa_conta_receber BIGINT NOT NULL,
@@ -412,7 +411,6 @@ CREATE TABLE conta_receber (
    CONSTRAINT chk_status_conta_receber CHECK (status_conta_receber IN ('Pendente', 'Recebido', 'Atrasado', 'Cancelado'))
 );
 CREATE INDEX idx_conta_receber_vencimento ON conta_receber(id_empresa_conta_receber, data_vencimento_conta_receber, status_conta_receber);
-
 
 -- ==============================================================================
 -- SCRIPT DE CORREÇÃO: colunas que armazenam dados criptografados

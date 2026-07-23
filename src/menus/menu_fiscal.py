@@ -1,55 +1,65 @@
+from menus.menu_documento_fiscal import menu_documento_fiscal
+from menus.menu_item_documento_fiscal import menu_item_documento_fiscal
+from menus.menu_cronograma_tributario import menu_cronograma_tributario
+from menus.menu_guia_pagamento import menu_guia_pagamento
+from menus.menu_socio import menu_socio
+
+from util.cores import (
+    AZUL_CLARO,
+    VERDE,
+    AMARELO,
+    VERMELHO,
+    NEGRITO,
+    RESET
+)
+
 from menus.menu_imposto import menu_imposto
-
-
-# futuramente você vai criar esses:
-# from menus.menu_documento_fiscal import menu_documento_fiscal
-# from menus.menu_cronograma_tributario import menu_cronograma_tributario
-# from menus.menu_guia_pagamento import menu_guia_pagamento
 
 
 def menu_fiscal():
 
     while True:
 
-        print("\n========================================")
-        print("              MENU FISCAL")
-        print("========================================")
-        print("1 - Gerenciar Impostos")
-        print("2 - Gerenciar Documentos Fiscais")
-        print("3 - Gerenciar Cronograma Tributário")
-        print("4 - Gerenciar Guias de Pagamento")
-        print("0 - Voltar")
-        print("========================================")
+        print(f"{AZUL_CLARO}╭────────────────────────────────────────────╮{RESET}")
+        print(f"{AZUL_CLARO}│{RESET} {NEGRITO}{VERDE}           MÓDULO FISCAL{RESET}                  {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}├────────────────────────────────────────────┤{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 1 ]{RESET} - Impostos                        {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 2 ]{RESET} - Documentos Fiscais              {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 3 ]{RESET} - Itens dos Documentos            {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 4 ]{RESET} - Cronograma Tributário          {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {AMARELO}[ 5 ]{RESET} - Guias de Pagamento             {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}   {VERMELHO}[ 0 ]{RESET} - Voltar                          {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}│{RESET}                                            {AZUL_CLARO}│{RESET}")
+        print(f"{AZUL_CLARO}╰────────────────────────────────────────────╯{RESET}")
 
-        opcao = input("Escolha uma opção: ")
-
+        opcao = input(f" {NEGRITO}➤ Escolha uma opção:{RESET} ")
 
         if opcao == "1":
 
             menu_imposto()
 
-
         elif opcao == "2":
 
-            print("\nMenu de documentos fiscais ainda não criado.")
-
-
+            menu_documento_fiscal()
+            
         elif opcao == "3":
 
-            print("\nMenu de cronograma tributário ainda não criado.")
-
+            menu_item_documento_fiscal()
 
         elif opcao == "4":
 
-            print("\nMenu de guias de pagamento ainda não criado.")
+            menu_cronograma_tributario()
 
+        elif opcao == "5":
+
+            menu_guia_pagamento()
 
         elif opcao == "0":
 
-            print("\nRetornando ao menu principal...")
             break
-
 
         else:
 
-            print("\nOpção inválida! Tente novamente.")
+            print("\nOpção inválida!")
